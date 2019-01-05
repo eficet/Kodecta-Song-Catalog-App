@@ -36,11 +36,14 @@ public class SongController {
         try{
             List<Song> songList=songRepository.findAll();
             if(!songList.isEmpty())
-               return new ResponseEntity<>(songList, HttpStatus.OK);
+
+
+                return HttpHelper.getHttpResponseEntity(songList, HttpStatus.OK);
+
             return HttpHelper.getHttpResponseEntity(StringHelper.NO_SONGS_IN_DATABASE, HttpStatus.NOT_FOUND);
         }
         catch (Exception e){
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+            return HttpHelper.getHttpResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -57,7 +60,7 @@ public class SongController {
             return new ResponseEntity<>(song,HttpStatus.OK);
         }
         catch (Exception e){
-         return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+         return HttpHelper.getHttpResponseEntity(e.getMessage(),HttpStatus.NOT_FOUND);
         }
     }
 
@@ -71,10 +74,10 @@ public class SongController {
             if(!helper.isNullOrEmpty(name)) {
                 List<Song> songList = songRepository.findByArtistNameIgnoreCase(name);
                 if (songList.isEmpty())
-                    return new ResponseEntity<>("No Songs found with the given Artist Name",HttpStatus.NOT_FOUND);
-                return new ResponseEntity<>(songList, HttpStatus.OK);
+                    return  HttpHelper.getHttpResponseEntity(StringHelper.NO_SONGS_BY_ARTIST_NAME_IN_DATABASE,HttpStatus.NOT_FOUND);
+                return HttpHelper.getHttpResponseEntity(songList, HttpStatus.OK);
             }
-            else return new ResponseEntity<>("Your Name is null or empty , please enter the name !!",HttpStatus.BAD_REQUEST);
+            else return  HttpHelper.getHttpResponseEntity(StringHelper.FIELD_NAME_NULL_OR_EMPTY,HttpStatus.BAD_REQUEST);
         }
         catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
@@ -88,13 +91,13 @@ public class SongController {
             if(!helper.isNullOrEmpty(genre)) {
                 List<Song> songList = songRepository.findByGenreIgnoreCase(genre);
                 if (songList.isEmpty())
-                    return new ResponseEntity<>("No Songs found with the given genre",HttpStatus.NOT_FOUND);
-                return new ResponseEntity<>(songList, HttpStatus.OK);
+                    return HttpHelper.getHttpResponseEntity(StringHelper.NO_SONGS_BY_GENRE_IN_DATABASE,HttpStatus.NOT_FOUND);
+                return HttpHelper.getHttpResponseEntity(songList, HttpStatus.OK);
             }
-            return new ResponseEntity<>("Your Name is null or empty , please enter the name !!",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(StringHelper.FIELD_NAME_NULL_OR_EMPTY,HttpStatus.BAD_REQUEST);
         }
         catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+            return  HttpHelper.getHttpResponseEntity(e.getMessage(),HttpStatus.NOT_FOUND);
         }
     }
 
@@ -105,13 +108,13 @@ public class SongController {
             if(!helper.isNullOrEmpty(provider)) {
                 List<Song> songList = songRepository.findByProviderProviderNameIgnoreCase(provider);
                 if (songList.isEmpty())
-                    return new ResponseEntity<>("No Songs found with the given Artist Name",HttpStatus.NOT_FOUND);
-                return new ResponseEntity<>(songList, HttpStatus.OK);
+                    return HttpHelper.getHttpResponseEntity("No Songs found with the given Artist Name",HttpStatus.NOT_FOUND);
+                return HttpHelper.getHttpResponseEntity(songList, HttpStatus.OK);
             }
-            else return new ResponseEntity<>("Your Name is null or empty , please enter the name !!",HttpStatus.BAD_REQUEST);
+            else return HttpHelper.getHttpResponseEntity(StringHelper.FIELD_NAME_NULL_OR_EMPTY,HttpStatus.BAD_REQUEST);
         }
         catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+            return HttpHelper.getHttpResponseEntity(e.getMessage(),HttpStatus.NOT_FOUND);
         }
     }
 
@@ -123,13 +126,13 @@ public class SongController {
             if(!helper.isNullOrEmpty(name)) {
                 List<Song> songList = songRepository.findBySongNameIgnoreCase(name);
                 if (songList.isEmpty())
-                    return new ResponseEntity<>("No Songs found with the given Song Name",HttpStatus.NOT_FOUND);
-                return new ResponseEntity<>(songList, HttpStatus.OK);
+                    return HttpHelper.getHttpResponseEntity("No Songs found with the given Song Name",HttpStatus.NOT_FOUND);
+                return HttpHelper.getHttpResponseEntity(songList, HttpStatus.OK);
             }
-            else return new ResponseEntity<>("Your Name is null or empty , please enter the name !!",HttpStatus.BAD_REQUEST);
+            else return HttpHelper.getHttpResponseEntity(StringHelper.FIELD_NAME_NULL_OR_EMPTY,HttpStatus.BAD_REQUEST);
         }
         catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+            return HttpHelper.getHttpResponseEntity(e.getMessage(),HttpStatus.NOT_FOUND);
         }
     }
     @GetMapping("/songs/artist/country/{country}")
@@ -138,16 +141,15 @@ public class SongController {
             if(!helper.isNullOrEmpty(country)) {
                 List<Song> songList = songRepository.findByArtistCountry(country);
                 if (songList.isEmpty())
-                    return new ResponseEntity<>("No Songs found with the given Country",HttpStatus.NOT_FOUND);
-                return new ResponseEntity<>(songList, HttpStatus.OK);
+                    return HttpHelper.getHttpResponseEntity("No Songs found with the given Country",HttpStatus.NOT_FOUND);
+                return HttpHelper.getHttpResponseEntity(songList, HttpStatus.OK);
             }
-            else return new ResponseEntity<>("Your Name is null or empty , please enter the name !!",HttpStatus.BAD_REQUEST);
+            else return HttpHelper.getHttpResponseEntity(StringHelper.FIELD_NAME_NULL_OR_EMPTY,HttpStatus.BAD_REQUEST);
         }
         catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+            return HttpHelper.getHttpResponseEntity(e.getMessage(),HttpStatus.NOT_FOUND);
         }
     }
-
 
 
     //                             *************** Adding and Updating methods ***********
@@ -160,6 +162,7 @@ public class SongController {
         if(!helper.isNullOrEmpty(songMappingHelper)){
         //setting the values of song helper to Song object to be saved to the database
         Song song = new Song(songMappingHelper.get_songId(), songMappingHelper.get_songName(), songMappingHelper.get_genre(), songMappingHelper.get_artistId());
+
         //mapping artistId as foriegn key
         //I could also add providerId as a parameter in the constructor of Song but i wanted to try another way without it
         song.setProvider(new Provider(songMappingHelper.get_providerId(),""));
@@ -168,25 +171,31 @@ public class SongController {
         song.setCreatedAt(LocalDateTime.now());
         song.setPublishingDate(songMappingHelper.get_publishingDate());
         songRepository.save(song);
-        return new ResponseEntity<>(song,HttpStatus.CREATED);
+        return HttpHelper.getHttpResponseEntity(song,HttpStatus.CREATED);
         }
-        else return new ResponseEntity<>("You have empty fields or null values,Please insert correct values!!",HttpStatus.BAD_REQUEST);
+        else return HttpHelper.getHttpResponseEntity("You have empty fields or null values,Please insert correct values!!",HttpStatus.BAD_REQUEST);
         }
         catch (Exception e){
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+            return HttpHelper.getHttpResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
 
     @PutMapping(value = "/songs/{id}")
-    public void updateSong(@RequestBody SongMappingHelper songMappingHelper, @PathVariable Long id){
+    public ResponseEntity<?> updateSong(@RequestBody SongMappingHelper songMappingHelper, @PathVariable Long id){
 
-        Song song1=songRepository.getOne(id);
-        song1.setArtist(new Artist(songMappingHelper.get_artistId(),"",0,""));
-        song1.setProvider(new Provider(songMappingHelper.get_providerId(),""));
-        song1.setSongName(songMappingHelper.get_songName());
-        song1.setGenre(songMappingHelper.get_genre());
-        song1.setPublishingDate(songMappingHelper.get_publishingDate());
-        songRepository.save(song1);
+        try {
+            Song song1 = songRepository.getOne(id);
+            song1.setArtist(new Artist(songMappingHelper.get_artistId(), "", 0, ""));
+            song1.setProvider(new Provider(songMappingHelper.get_providerId(), ""));
+            song1.setSongName(songMappingHelper.get_songName());
+            song1.setGenre(songMappingHelper.get_genre());
+            song1.setPublishingDate(songMappingHelper.get_publishingDate());
+            songRepository.save(song1);
+            return HttpHelper.getHttpResponseEntity(song1,HttpStatus.CREATED);
+        }
+        catch (Exception e){
+            return HttpHelper.getHttpResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
     }
 
     //                                    ******************* Deleting Song method *****************
