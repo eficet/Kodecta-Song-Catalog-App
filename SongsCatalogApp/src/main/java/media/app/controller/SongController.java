@@ -36,7 +36,7 @@ public class SongController {
         try{
             List<Song> songList=songRepository.findAll();
             if(!songList.isEmpty())
-                new ResponseEntity<>(songList, HttpStatus.OK);
+               return new ResponseEntity<>(songList, HttpStatus.OK);
             return HttpHelper.getHttpResponseEntity(StringHelper.NO_SONGS_IN_DATABASE, HttpStatus.NOT_FOUND);
         }
         catch (Exception e){
