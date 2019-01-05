@@ -1,0 +1,14 @@
+media\app\controller\ProviderController.class
+media\app\repository\ProviderRepository.class
+media\app\controller\ArtistController.class
+media\app\helpers\StringHelper.class
+media\app\repository\ArtistRepository.class
+media\app\helpers\HttpHelper.class
+media\app\helpers\SongMappingHelper.class
+media\app\model\Song.class
+media\app\repository\SongRepository.class
+media\app\model\Artist.class
+media\app\model\Provider.class
+media\app\helpers\Helper.class
+media\app\SongsCatalogApiApp.class
+media\app\controller\SongController.class

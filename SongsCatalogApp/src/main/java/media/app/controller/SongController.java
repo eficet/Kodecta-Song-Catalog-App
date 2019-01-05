@@ -1,6 +1,8 @@
 package media.app.controller;
 
-import media.app.helpers.SongHelper;
+import media.app.helpers.HttpHelper;
+import media.app.helpers.SongMappingHelper;
+import media.app.helpers.StringHelper;
 import media.app.model.*;
 import media.app.repository.SongRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,19 +27,28 @@ public class SongController {
 
 //                            ***************** Methods for getting Songs ***************
 
+    /**
+     * This function returns list of  all songs.
+     * @return the list of all songs
+     */
     @GetMapping(value = "/songs")
     public ResponseEntity<?> getAll(){
         try{
             List<Song> songList=songRepository.findAll();
             if(!songList.isEmpty())
-                return new ResponseEntity<>(songList, HttpStatus.OK);
-            else return new ResponseEntity<>("There is no songs in the database, Please Add !!",HttpStatus.NOT_FOUND);
+                new ResponseEntity<>(songList, HttpStatus.OK);
+            return HttpHelper.getHttpResponseEntity(StringHelper.NO_SONGS_IN_DATABASE, HttpStatus.NOT_FOUND);
         }
         catch (Exception e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
 
+    /**
+     * This function retrieves one song by its ID.
+     * @param id the id of the song
+     * @return the song object
+     */
     @GetMapping(value = "/songs/{id}")
     public ResponseEntity<?> getSongById(@PathVariable Long id){
         try {
@@ -80,7 +91,7 @@ public class SongController {
                     return new ResponseEntity<>("No Songs found with the given genre",HttpStatus.NOT_FOUND);
                 return new ResponseEntity<>(songList, HttpStatus.OK);
             }
-            else return new ResponseEntity<>("Your Name is null or empty , please enter the name !!",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Your Name is null or empty , please enter the name !!",HttpStatus.BAD_REQUEST);
         }
         catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
@@ -142,20 +153,20 @@ public class SongController {
     //                             *************** Adding and Updating methods ***********
 
     @PostMapping(value = "/songs")
-    public ResponseEntity<?> createSong(@RequestBody SongHelper songHelper){
+    public ResponseEntity<?> createSong(@RequestBody SongMappingHelper songMappingHelper){
 
         try{
 
-        if(!helper.isNullOrEmpty(songHelper)){
+        if(!helper.isNullOrEmpty(songMappingHelper)){
         //setting the values of song helper to Song object to be saved to the database
-        Song song = new Song(songHelper.get_songId(),songHelper.get_songName(),songHelper.get_genre(),songHelper.get_artistId());
+        Song song = new Song(songMappingHelper.get_songId(), songMappingHelper.get_songName(), songMappingHelper.get_genre(), songMappingHelper.get_artistId());
         //mapping artistId as foriegn key
         //I could also add providerId as a parameter in the constructor of Song but i wanted to try another way without it
-        song.setProvider(new Provider(songHelper.get_providerId(),""));
+        song.setProvider(new Provider(songMappingHelper.get_providerId(),""));
 
         // setting the date and time to the current time
         song.setCreatedAt(LocalDateTime.now());
-        song.setPublishingDate(songHelper.get_publishingDate());
+        song.setPublishingDate(songMappingHelper.get_publishingDate());
         songRepository.save(song);
         return new ResponseEntity<>(song,HttpStatus.CREATED);
         }
@@ -167,14 +178,14 @@ public class SongController {
     }
 
     @PutMapping(value = "/songs/{id}")
-    public void updateSong(@RequestBody SongHelper songHelper,@PathVariable Long id){
+    public void updateSong(@RequestBody SongMappingHelper songMappingHelper, @PathVariable Long id){
 
         Song song1=songRepository.getOne(id);
-        song1.setArtist(new Artist(songHelper.get_artistId(),"",0,""));
-        song1.setProvider(new Provider(songHelper.get_providerId(),""));
-        song1.setSongName(songHelper.get_songName());
-        song1.setGenre(songHelper.get_genre());
-        song1.setPublishingDate(songHelper.get_publishingDate());
+        song1.setArtist(new Artist(songMappingHelper.get_artistId(),"",0,""));
+        song1.setProvider(new Provider(songMappingHelper.get_providerId(),""));
+        song1.setSongName(songMappingHelper.get_songName());
+        song1.setGenre(songMappingHelper.get_genre());
+        song1.setPublishingDate(songMappingHelper.get_publishingDate());
         songRepository.save(song1);
     }
 
