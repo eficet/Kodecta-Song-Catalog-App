@@ -23,7 +23,6 @@ public class SongController {
     @Autowired
     private SongRepository songRepository;
 
-    private Helper helper= new Helper();
 
 //                            ***************** Methods for getting Songs ***************
 
@@ -71,7 +70,7 @@ public class SongController {
     @GetMapping(value = "/songs/artist/{name}")
     public ResponseEntity<?> getByArtistName(@PathVariable String name){
         try {
-            if(!helper.isNullOrEmpty(name)) {
+            if(!Helper.isNullOrEmpty(name)) {
                 List<Song> songList = songRepository.findByArtistNameIgnoreCase(name);
                 if (songList.isEmpty())
                     return  HttpHelper.getHttpResponseEntity(StringHelper.NO_SONGS_BY_ARTIST_NAME_IN_DATABASE,HttpStatus.NOT_FOUND);
@@ -88,7 +87,7 @@ public class SongController {
     @GetMapping(value = "/songs/genre/{genre}")
     public ResponseEntity<?> getByGenre(@PathVariable String genre){
         try {
-            if(!helper.isNullOrEmpty(genre)) {
+            if(!Helper.isNullOrEmpty(genre)) {
                 List<Song> songList = songRepository.findByGenreIgnoreCase(genre);
                 if (songList.isEmpty())
                     return HttpHelper.getHttpResponseEntity(StringHelper.NO_SONGS_BY_GENRE_IN_DATABASE,HttpStatus.NOT_FOUND);
@@ -105,7 +104,7 @@ public class SongController {
     @GetMapping(value = "/songs/provider/{provider}")
     public ResponseEntity<?> getByPublisher(@PathVariable String provider){
         try {
-            if(!helper.isNullOrEmpty(provider)) {
+            if(!Helper.isNullOrEmpty(provider)) {
                 List<Song> songList = songRepository.findByProviderProviderNameIgnoreCase(provider);
                 if (songList.isEmpty())
                     return HttpHelper.getHttpResponseEntity("No Songs found with the given Artist Name",HttpStatus.NOT_FOUND);
@@ -123,7 +122,7 @@ public class SongController {
     @GetMapping(value = "/songs/name/{name}")
     public ResponseEntity<?> getBySongName(@PathVariable String name){
         try {
-            if(!helper.isNullOrEmpty(name)) {
+            if(!Helper.isNullOrEmpty(name)) {
                 List<Song> songList = songRepository.findBySongNameIgnoreCase(name);
                 if (songList.isEmpty())
                     return HttpHelper.getHttpResponseEntity("No Songs found with the given Song Name",HttpStatus.NOT_FOUND);
@@ -138,7 +137,7 @@ public class SongController {
     @GetMapping("/songs/artist/country/{country}")
     public ResponseEntity<?> getByCountry(@PathVariable String country){
         try {
-            if(!helper.isNullOrEmpty(country)) {
+            if(!Helper.isNullOrEmpty(country)) {
                 List<Song> songList = songRepository.findByArtistCountry(country);
                 if (songList.isEmpty())
                     return HttpHelper.getHttpResponseEntity("No Songs found with the given Country",HttpStatus.NOT_FOUND);
@@ -159,7 +158,7 @@ public class SongController {
 
         try{
 
-        if(!helper.isNullOrEmpty(songMappingHelper)){
+        if(!Helper.isNullOrEmpty(songMappingHelper)){
         //setting the values of song helper to Song object to be saved to the database
         Song song = new Song(songMappingHelper.get_songId(), songMappingHelper.get_songName(), songMappingHelper.get_genre(), songMappingHelper.get_artistId());
 
@@ -191,7 +190,7 @@ public class SongController {
             song1.setGenre(songMappingHelper.get_genre());
             song1.setPublishingDate(songMappingHelper.get_publishingDate());
             songRepository.save(song1);
-            return HttpHelper.getHttpResponseEntity(song1,HttpStatus.CREATED);
+            return HttpHelper.getHttpResponseEntity(HttpStatus.CREATED);
         }
         catch (Exception e){
             return HttpHelper.getHttpResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);

@@ -8,6 +8,10 @@ import java.util.List;
 
 public class HttpHelper {
 
+    public static ResponseEntity<?> getHttpResponseEntity (HttpStatus status) {
+        return new ResponseEntity<>(status);
+    }
+
     public static ResponseEntity<?> getHttpResponseEntity (String message, HttpStatus status) {
         return new ResponseEntity<>(message, status);
     }
