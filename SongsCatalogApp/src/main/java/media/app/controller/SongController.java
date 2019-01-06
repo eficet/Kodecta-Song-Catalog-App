@@ -128,7 +128,11 @@ public class SongController {
     }
 
 
-    // search for songs by songName
+    /**
+     * This function search for songs by songName
+     * @param name Song name
+     * @return List of Songs
+     */
     @GetMapping(value = "/songs/name/{name}")
     public ResponseEntity<?> getBySongName(@PathVariable String name) {
         try {
@@ -144,6 +148,11 @@ public class SongController {
         }
     }
 
+    /**
+     * This function searches for songs by Country
+     * @param country Country Name
+     * @return List of songs
+     */
     @GetMapping("/songs/country/{country}")
     public ResponseEntity<?> getByCountry(@PathVariable String country) {
         try {
@@ -162,6 +171,11 @@ public class SongController {
 
     //                             *************** Adding and Updating methods ***********
 
+    /**
+     * This function is Adding a new Song
+     * @param songMappingHelper from the request body songMappingHelper Object
+     * @return The new added Object
+     */
     @PostMapping(value = "/songs")
     public ResponseEntity<?> createSong(@RequestBody SongMappingHelper songMappingHelper) {
 
@@ -187,6 +201,12 @@ public class SongController {
         }
     }
 
+    /**
+     *
+     * @param songMappingHelper
+     * @param id The id of the song to be changed
+     * @return Returns HttpStatus Created
+     */
     @PutMapping(value = "/songs/{id}")
     public ResponseEntity<?> updateSong(@RequestBody SongMappingHelper songMappingHelper, @PathVariable Long id) {
 
@@ -206,6 +226,11 @@ public class SongController {
 
     //                                    ******************* Deleting Song method *****************
 
+    /**
+     * This function Deletes a song
+     * @param id the ID of the song
+     * @return HttpStatus NO_CONTENT
+     */
     @DeleteMapping(value = "/songs/{id}")
     public ResponseEntity<?> deleteSong(@PathVariable Long id) {
         try {
@@ -216,11 +241,4 @@ public class SongController {
         }
     }
 
-    /*@DeleteMapping(value = "/{id}/provider/{providerId}")
-    public void deleteProvider(@PathVariable Long id,@PathVariable Long providerId){
-        Song song=songRepository.getOne(id);
-        song.getArtist().setArtistId(null);
-        providerRepository.deleteById(providerId);
-
-    }*/
 }
