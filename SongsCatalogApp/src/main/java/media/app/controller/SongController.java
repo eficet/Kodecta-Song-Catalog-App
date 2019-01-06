@@ -69,6 +69,7 @@ public class SongController {
 
     /**
      * This function Searches for songs By Artist Name
+     *
      * @param name Artist Name
      * @return List of songs
      */
@@ -89,6 +90,7 @@ public class SongController {
 
     /**
      * This function searches for songs by Genre
+     *
      * @param genre genre of the song
      * @return List of the selected songs
      */
@@ -109,6 +111,7 @@ public class SongController {
 
     /**
      * This function searches for songs by Publisher name
+     *
      * @param provider provider nasm
      * @return List of songs
      */
@@ -130,6 +133,7 @@ public class SongController {
 
     /**
      * This function search for songs by songName
+     *
      * @param name Song name
      * @return List of Songs
      */
@@ -149,7 +153,8 @@ public class SongController {
     }
 
     /**
-     * This function searches for songs by Country
+     * This function searches for songs by Artist Country
+     *
      * @param country Country Name
      * @return List of songs
      */
@@ -173,6 +178,7 @@ public class SongController {
 
     /**
      * This function is Adding a new Song
+     *
      * @param songMappingHelper from the request body songMappingHelper Object
      * @return The new added Object
      */
@@ -183,15 +189,15 @@ public class SongController {
 
             if (!Helper.isNullOrEmpty(songMappingHelper)) {
                 //setting the values of song helper to Song object to be saved to the database
-                Song song = new Song(songMappingHelper.get_songId(), songMappingHelper.get_songName(), songMappingHelper.get_genre(), songMappingHelper.get_artistId());
+                Song song = new Song(songMappingHelper.getSongId(), songMappingHelper.getSongName(), songMappingHelper.getGenre(), songMappingHelper.getArtistId());
 
                 //mapping artistId as foriegn key
                 //I could also add providerId as a parameter in the constructor of Song but i wanted to try another way without it
-                song.setProvider(new Provider(songMappingHelper.get_providerId(), ""));
+                song.setProvider(new Provider(songMappingHelper.getProviderId(), ""));
 
                 // setting the date and time to the current time
                 song.setCreatedAt(LocalDateTime.now());
-                song.setPublishingDate(songMappingHelper.get_publishingDate());
+                song.setPublishingDate(songMappingHelper.getPublishingDate());
                 songRepository.save(song);
                 return HttpHelper.getHttpResponseEntity(song, HttpStatus.CREATED);
             } else
@@ -202,9 +208,8 @@ public class SongController {
     }
 
     /**
-     *
      * @param songMappingHelper
-     * @param id The id of the song to be changed
+     * @param id                The id of the song to be changed
      * @return Returns HttpStatus Created
      */
     @PutMapping(value = "/songs/{id}")
@@ -212,11 +217,12 @@ public class SongController {
 
         try {
             Song song1 = songRepository.getOne(id);
-            song1.setArtist(new Artist(songMappingHelper.get_artistId(), "", 0, ""));
-            song1.setProvider(new Provider(songMappingHelper.get_providerId(), ""));
-            song1.setSongName(songMappingHelper.get_songName());
-            song1.setGenre(songMappingHelper.get_genre());
-            song1.setPublishingDate(songMappingHelper.get_publishingDate());
+            song1.setArtist(new Artist(songMappingHelper.getArtistId(), "", 0, ""));
+            song1.setProvider(new Provider(songMappingHelper.getProviderId(), ""));
+            song1.setSongName(songMappingHelper.getSongName());
+            song1.setGenre(songMappingHelper.getGenre());
+            song1.setCreatedAt(songMappingHelper.getCreatedAt());
+            song1.setPublishingDate(songMappingHelper.getPublishingDate());
             songRepository.save(song1);
             return HttpHelper.getHttpResponseEntity(HttpStatus.CREATED);
         } catch (Exception e) {
@@ -228,6 +234,7 @@ public class SongController {
 
     /**
      * This function Deletes a song
+     *
      * @param id the ID of the song
      * @return HttpStatus NO_CONTENT
      */
