@@ -13,19 +13,32 @@ This App allows you to preform CRUD operations for Artists, Providers and most i
 
 ### Entities
 
-Artist   - artistId, name, country, age.
-Provider - providerId, providerName.
-Song     - songId, songName, genre, createdAt, publishingDate.
+- Artist   - artistId, name, country, age.
+- Provider - providerId, providerName.
+- Song     - songId, songName, genre, createdAt, publishingDate.
 
 ### Routes
-
+#### Song Routes:
 1. Route URL: ` http://localhost:8080/api/songs ` on this route you can preform GET and POST methods.
+2. Route URL: ` http://localhost:8080/api/songs/{id}`
+on this route you preform DELETE and PUT, so you can either delete or update the songs.
+3. Route URL: `http://localhost:8080/api/songs/artist/{name}` on this route you search for the songs by Artist name.
+4. Route URL: `http://localhost:8080/api/songs/genre/{genre}` on this route you search for the songs by genre.
+5. Route URL: `http://localhost:8080/api/songs/provider/{provider}` on this route you search for the songs by Provider name.
+6. Route URL: `http://localhost:8080/api/songs/name/{name}` on this route you search for the songs by Song's name.
+7. Route URL: `http://localhost:8080/songs/country/{country}on this route you search for the songs by Origin country.
 
-`  /** POST This function is Adding a new Song.
-     * GET  This function returns list of  all songs.
-     *
-     * @return the list of all songs
-     */ `
+#### Artist Routes:
+1. Route URL: ` http://localhost:8080/api/artist ` on this route you can preform GET and POST methods.
+2.Route URL: ` http://localhost:8080/api/songs/{id}`
+on this route you preform DELETE and PUT, so you can update the artist.
 
-2. Route URL: ` http://localhost:8080/api/songs/{id}
+#### Provider Routes:
+
+1. Route URL: ` http://localhost:8080/api/provider ` on this route you can preform GET and POST methods.
+2.Route URL: ` http://localhost:8080/api/provider/{id}`
+on this route you preform PUT, so you can update the provider.
+
+
+
 
