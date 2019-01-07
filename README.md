@@ -26,7 +26,7 @@ on this route you preform DELETE and PUT, so you can either delete or update the
 4. Route URL: `http://localhost:8080/api/songs/genre/{genre}` on this route you search for the songs by genre.
 5. Route URL: `http://localhost:8080/api/songs/provider/{provider}` on this route you search for the songs by Provider name.
 6. Route URL: `http://localhost:8080/api/songs/name/{name}` on this route you search for the songs by Song's name.
-7. Route URL: `http://localhost:8080/songs/country/{country}` on this route you search for the songs by Origin country.
+7. Route URL: `http://localhost:8080/api/songs/country/{country}` on this route you search for the songs by Origin country.
 
 #### Artist Routes:
 1. Route URL: ` http://localhost:8080/api/artist ` on this route you can preform GET and POST methods.
