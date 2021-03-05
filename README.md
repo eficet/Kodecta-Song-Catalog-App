@@ -1,8 +1,8 @@
-# Kodecta Song Catalog Application
+# Song Catalog Application
 I built this RestFul API using Java Spring Boot and JPA & Hibernate to build my Embadded SQL database.
 
 ## Instructions
-1. Clone the repository from  ` https://github.com/eficet/Kodecta-Song-Catalog-App.git`.
+1. Clone the repository fromÂ  ` https://github.com/eficet/Kodecta-Song-Catalog-App.git`.
 2. To start the server and run the Application hit this command in the terminal after u enter the project folder ` java -jar target/Songs-Api-1.0-SNAPSHOT.jar `.
 3. The database will be dropped and get created each time you run the server(the database has initial data so you can start testing).
 4. To test the Application you can use Postman, In the documentaion you will see a detailed explanation of the routes and what they do.
